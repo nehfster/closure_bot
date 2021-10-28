@@ -1,0 +1,203 @@
+openapi: 3.0.0
+info:
+  $ref: ./info.yaml
+
+servers:
+  - url: /api/v1
+
+paths:
+  /alive:
+    get:
+      tags:
+        - alive
+      summary: Get API Status
+      description: Get API Status
+      operationId: alive
+      responses:
+        "200":
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ServerInfo"
+
+  /user/login:
+    post:
+      tags:
+        - user
+      summary: Login
+      requestBody:
+        $ref: "#/components/requestBodies/UserLoginBody"
+      description: Allows users to login
+      operationId: login
+      responses:
+        "200":
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GeneralResponse"
+
+  /bot/login:
+    post:
+      tags:
+        - user
+      summary: Login
+      requestBody:
+        $ref: "#/components/requestBodies/UserLoginBody"
+      description: Request JWT for bot
+      operationId: botLogin
+      responses:
+        "200":
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GeneralResponse"
+
+  /settings:
+    get:
+      tags:
+        - user
+      summary: Login
+      description: Allows users to login
+      operationId: settings
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GeneralResponse"
+
+    post:
+      tags:
+        - jira
+      summary: Add a new config
+      requestBody:
+        $ref: "#/components/requestBodies/ConfigBody"
+      description: Add a new config
+      operationId: postSettings
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GeneralResponse"
+
+  /hoop:
+    get:
+      tags:
+        - user
+      summary: Get current HOOP
+      description: Retrieve HOOP per skill
+      operationId: getHoop
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GeneralResponse"
+
+components:
+  # Reusable schemas (data models)
+  schemas:
+    GeneralResponse:
+      type: object
+
+    GeneralArray:
+      type: array
+
+    #Uncommon
+    ServerInfo:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        version:
+          type: string
+        uptime:
+          type: number
+
+    UserLogin:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+          minLength: 5
+          maxLength: 500
+        password:
+          type: string
+          minLength: 5
+          maxLength: 500
+
+    Config:
+      type: object
+      required:
+        - closureSkills
+        - refreshProfileTime
+        - refreshSkillManager
+      properties:
+        refreshProfileTime:
+          type: number
+        refreshSkillManager:
+          type: number
+        closureSkills:
+          type: array
+          items:
+            type: object
+            required:
+              - message
+              - skillId
+              - skillName
+              - matchMessage
+              - hoop
+            properties:
+              message:
+                type: string
+              skillId:
+                type: string
+              skillName:
+                type: string
+              matchMessage:
+                type: string
+              hoop:
+                type: object
+                required:
+                  - open
+                  - close
+                properties:
+                  open:
+                    type: string
+                  close:
+                    type: string
+
+  requestBodies:
+    UserLoginBody:
+      description: User Login
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/UserLogin"
+
+    ConfigBody:
+      description: User Login
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Config"
