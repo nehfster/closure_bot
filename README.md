@@ -1,5 +1,11 @@
 # Messaging Closure Bot Notes
 
+# Closure Bot Overview:
+
+> The closure bot app is essentially a bot written from the LivePerson Messaging Agent SDK for programmatically building a bot with LivePerson Conversational Cloud. It enables the bot to handle consumer conversations, escalate to a human when needed, and perform all agent actions. It uses other specific LivePerson API's to give this bot access to agent and agent manager activities. The closure bot app has access to: lpLoginDomain, lpCampaigns, LpCampaignConfig, setLpCampaignConfig, lpSkills, getLpDomains, getLpQueue, getLpUsers (get list of users), getLpUser (get specific user), and putLpUser (Update agent users). 
+
+> Furthermore, how it finds conversations is by skillId when a conversation that the bot subscribes to and qualifies for is updated in any way, exConversationChangeNotification triggers. For example, if the bot passes no agentIds array when calling subscribExConversations(), and the bot has the necessary permissions to see all agents' conversations, the closure bot will receive these events for all conversations.
+
 ## Client and Server
 > client is separate, however in the same repo - do not deploy to another repo.
 
